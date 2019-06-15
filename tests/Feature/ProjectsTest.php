@@ -30,4 +30,18 @@ class ProjectsTest extends TestCase
         $this->get('/projects')->assertSee($attributes['title']);
 
     }
+
+    /** @test */
+    public function a_project_requires_a_title() {
+        $this->withExceptionHandling();
+        $attributes = factory('App\Project')->raw(['title' => '']); // Use factory to generate an example project in raw form (array not object that is not persisted in DB). Then set the title manually to an empty string. 
+        $this->post('/projects', $attributes)->assertSessionHasErrors('title');
+    }
+
+    /** @test */
+    public function a_project_requires_a_description() {
+        $this->withExceptionHandling();
+        $attributes = factory('App\Project')->raw(['description' => '']); 
+        $this->post('/projects', $attributes)->assertSessionHasErrors('description');
+    }
 }
