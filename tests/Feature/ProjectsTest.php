@@ -17,18 +17,26 @@ class ProjectsTest extends TestCase
     // Create a test to verify that users can create projects
     public function a_user_can_create_a_project() {
         $this->withoutExceptionHandling(); // In tests it's typically a good idea to remove the nice way Laravel handles exceptions
-
+        
         $attributes = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph
         ];
         
         $this->post('/projects', $attributes)->assertRedirect('/projects');
-
+        
         $this->assertDatabaseHas('projects', $attributes);
-
+        
         $this->get('/projects')->assertSee($attributes['title']);
+        
+    }
+    
+    /** @test */
+    public function a_user_can_view_a_project() {
+        $this->withoutExceptionHandling(); // In tests it's typically a good idea to remove the nice way Laravel handles exceptions
+        $project = factory('App\Project')->create(); // If we switch this to raw, I expect we would change -> to brackets below
 
+        $this->get($project->path())->assertSee($project->title)->assertSee($project->description);
     }
 
     /** @test */

@@ -14,6 +14,11 @@ class ProjectsController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+    public function show(Project $project) {
+        // not needed because we switched to use route:model binding above as a parameter $project = Project::findOrFail(request('project'));
+        return view('projects.show', compact('project'));
+    }
+
     public function store() {
         // validate
         $attributes = request()->validate(['title' => 'required', 'description' => 'required']);
@@ -22,4 +27,6 @@ class ProjectsController extends Controller
         // redirect
         return redirect('/projects');
     }
+
+
 }
