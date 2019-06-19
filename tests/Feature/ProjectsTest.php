@@ -14,14 +14,24 @@ class ProjectsTest extends TestCase
 
     
     /** @test */
-    public function only_authenticated_users_can_create_projects() {
+    public function guests_may_not_create_projects() {
         //$this->withExceptionHandling();
         $attributes = factory('App\Project')->raw();
         $this->post('/projects', $attributes)->assertRedirect('login');
         
     }
-    
-    // Create a test to verify that users can create projects
+
+    /** @test */
+    public function guests_may_not_view_projects() {
+        $this->get('/projects')->assertRedirect('login');
+    }
+
+    /** @test */
+    public function guests_may_not_view_a_single_project() {
+        $project = factory('App\Project')->create();
+
+        $this->get($project->path())->assertRedirect('login');
+    }
     
     /** @test */ // <-- test will not run without whatever this is?
     public function a_user_can_create_a_project() {
@@ -38,11 +48,20 @@ class ProjectsTest extends TestCase
     
     
     /** @test */
-    public function a_user_can_view_a_project() {
-        $this->withoutExceptionHandling(); // In tests it's typically a good idea to remove the nice way Laravel handles exceptions
-        $project = factory('App\Project')->create(); // If we switch this to raw, I expect we would change -> to brackets below
+    public function a_user_can_view_their_project() {
+        $this->be(factory('App\User')->create());
+        $project = factory('App\Project')->create(['owner_id' => auth()->id()]);
+
+        //$this->post('/projects', $project);
     
         $this->get($project->path())->assertSee($project->title)->assertSee($project->description);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_view_the_projects_of_others() {
+        $this->be(factory('App\User')->create());
+        $project = factory('App\Project')->create();
+        $this->get($project->path())->assertStatus(403);
     }
 
     /** @test */
