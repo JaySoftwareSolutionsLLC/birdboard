@@ -41,5 +41,9 @@ class ProjectsController extends Controller
         return redirect('/projects');
     }
 
+    public function create() {
+        return view('projects.create');
+    }
+
 
 }

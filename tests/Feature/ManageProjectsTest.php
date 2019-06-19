@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectsTest extends TestCase
+class ManageProjectsTest extends TestCase
 {
 
     use WithFaker, RefreshDatabase; // Adding withFaker allows us to add names, paragraphs, sentences, etc.
@@ -14,29 +14,35 @@ class ProjectsTest extends TestCase
 
     
     /** @test */
-    public function guests_may_not_create_projects() {
+    public function guests_may_not_manage_projects() {
         //$this->withExceptionHandling();
-        $attributes = factory('App\Project')->raw();
-        $this->post('/projects', $attributes)->assertRedirect('login');
-        
-    }
-
-    /** @test */
-    public function guests_may_not_view_projects() {
-        $this->get('/projects')->assertRedirect('login');
-    }
-
-    /** @test */
-    public function guests_may_not_view_a_single_project() {
+        //$attributes = factory('App\Project')->raw();
         $project = factory('App\Project')->create();
-
+        
+        // Typically one assertion per test is the standard. However, sometimes it makes sense to group common functionality together
+        $this->post('/projects', $project->toArray())->assertRedirect('login');
+        $this->get('/projects')->assertRedirect('login');
+        $this->get('/projects/create')->assertRedirect('login');
         $this->get($project->path())->assertRedirect('login');
     }
+
+    ///** @test */
+    //public function guests_may_not_view_projects() {
+        //$this->get('/projects')->assertRedirect('login');
+    //}
+
+    ///** @test */
+    //public function guests_may_not_view_a_single_project() {
+        //$project = factory('App\Project')->create();
+
+        //$this->get($project->path())->assertRedirect('login');
+    //}
     
     /** @test */ // <-- test will not run without whatever this is?
     public function a_user_can_create_a_project() {
         $this->withoutExceptionHandling(); // In tests it's typically a good idea to remove the nice way Laravel handles exceptions
         $this->actingAs(factory('App\User')->create());
+        $this->get('/projects/create')->assertStatus(200); // We assume the page should load at this endpoint
         $attributes = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph
