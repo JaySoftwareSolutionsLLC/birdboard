@@ -34,7 +34,7 @@ class ProjectsController extends Controller
         //$attributes['owner_id'] = auth()->id();
         //dd($attributes);
         auth()->user()->projects()->create($attributes);
-        
+        //mail(auth()->user()->email, 'New Project Created', 'Congratulations ' . auth()->user()->name . '! You created a project.');
         // persist
         //Project::create($attributes);
         // redirect
