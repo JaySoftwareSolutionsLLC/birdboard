@@ -8,8 +8,9 @@
             <div class='lg:w-3/4 px-3'>
                 <div class='mb-8'>
                     <h2 class='text-gray-500 font-normal text-lg'>Tasks</h2>
-                    <div class='card mb-3'>Task - 1</div>
-                    <div class='card'>Task - 2</div>
+                    @foreach ($project->tasks as $task)
+                    <div class='card mb-3'>{{ $task->body }}</div>
+                    @endforeach
                 </div>
                 <div class='mb-8'>
                     <h2 class='text-gray-500 font-normal text-lg'>General Notes</h2>

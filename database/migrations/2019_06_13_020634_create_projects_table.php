@@ -14,7 +14,7 @@ class CreateProjectsTable extends Migration
     public function up()
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id'); // Creates integer unsigned (PK)
             $table->string('title');
             $table->unsignedBigInteger('owner_id'); // This must exactly match datatype of foreign key
             $table->text('description');
