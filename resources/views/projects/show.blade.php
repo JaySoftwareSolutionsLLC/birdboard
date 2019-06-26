@@ -1,4 +1,4 @@
-@extends('layouts.app');
+@extends('layouts.app')
 @section('content')
     <header class='flex items-end mb-3 mx-3 py-4 flex justify-between items-center'>
         <h2 class='text-gray-500 text-sm font-normal'><a href="/projects" class='underline text-blue-400'>My Projects</a> / {{ $project->title }}</h2>
