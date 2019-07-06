@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.button {
+  @apply .bg-blue-400 .text-white .text-sm .no-underline .p-2 .rounded;
+  -webkit-box-shadow: 0 2px 7px 0 #b0eaff;
+          box-shadow: 0 2px 7px 0 #b0eaff;
+}
+
+.card {
+  @apply .bg-white .p-5 .rounded-lg .shadow block;
+}
+/*# sourceMappingURL=app.css.map */

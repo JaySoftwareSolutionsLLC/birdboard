@@ -9,7 +9,14 @@
                 <div class='mb-8'>
                     <h2 class='text-gray-500 font-normal text-lg'>Tasks</h2>
                     @forelse ($project->tasks as $task)
-                    <div class='card mb-3'>{{ $task->body }}</div>
+                    <div class='card mb-3'>
+                        <form method="POST" class='flex' action="{{ $task->path() }}">
+                            @method('PATCH')
+                            @csrf
+                            <input type="text" name="body" class='w-full {{ $task->completed ? "text-gray-500" : '' }}' value="{{ $task->body }}"/>
+                            <input type="checkbox" name="completed" onchange="this.form.submit()" {{ $task->completed ? "checked" : '' }}/>
+                        </form>
+                    </div>
                     @empty
                     @endforelse
                     <div class='card mb-3'>
