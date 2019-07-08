@@ -47,15 +47,45 @@ class ManageProjectsTest extends TestCase
         $this->get('/projects/create')->assertStatus(200); // We assume the page should load at this endpoint
         $attributes = [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph
+            'description' => $this->faker->sentence(3),
+            'notes' => 'General notes here.'
         ];
         $response = $this->post('/projects', $attributes);
         $project = Project::where($attributes)->first();
         $response->assertRedirect($project->path());
         $this->assertDatabaseHas('projects', $attributes);
         $this->get('/projects')->assertSee($attributes['title']);
+        $this->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description'])
+            ->assertSee($attributes['notes']);
+            
     }
-    
+
+    /** @test */
+    public function a_user_can_update_a_project()
+    {
+        $this->withExceptionHandling();
+        // Sign in
+        $this->signIn();
+        $attributes = [
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->sentence(),
+            'notes' => 'General notes here.'
+        ];
+        // Create project with this user
+        $response = $this->post('/projects', $attributes);
+        // Put project into DB
+        $project = Project::where($attributes)->first();
+        // Call update to project
+        $this->patch($project->path(), [
+            'notes' => 'New notes'
+        ]);
+        // Verify that project has been updated in database
+        $this->assertDatabaseHas('projects', ['notes' => 'New notes']);
+        // Verify that project is displaying updated notes in show page
+        $this->get($project->path())->assertSee('New notes');
+    }    
     
     /** @test */
     public function a_user_can_view_their_project() {
@@ -72,6 +102,13 @@ class ManageProjectsTest extends TestCase
         $this->signIn();
         $project = factory('App\Project')->create();
         $this->get($project->path())->assertStatus(403);
+    }
+
+    /** @test */
+    public function an_authenticated_user_cannot_update_the_projects_of_others() {
+        $this->signIn();
+        $project = factory('App\Project')->create();
+        $this->patch($project->path(), [])->assertStatus(403);
     }
 
     /** @test */

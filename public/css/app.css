@@ -7597,6 +7597,11 @@ video {
   box-shadow: 0 2px 7px 0 #b0eaff;
 }
 
+.button:hover {
+  background-color: #fff;
+  color: #47cdff;
+}
+
 .card {
   background-color: #fff;
   padding: 1.25rem;

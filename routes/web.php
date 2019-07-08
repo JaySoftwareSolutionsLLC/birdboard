@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/projects', 'ProjectsController@index');//->middleware('auth');
     Route::get('/projects/create', 'ProjectsController@create'); // Order of these may matter?
     Route::get('/projects/{project}', 'ProjectsController@show');//->middleware('auth');
+    Route::patch('/projects/{project}', 'ProjectsController@update');
     Route::post('/projects', 'ProjectsController@store');//->middleware('auth');
     // Task routes
     Route::post('/projects/{project}/tasks', 'ProjectTasksController@store');

@@ -10,6 +10,9 @@
 .button {
     @apply .bg-blue-400 .text-white .text-sm .no-underline .p-2 .rounded;
     box-shadow: 0 2px 7px 0 #b0eaff; 
+    &:hover {
+        @apply .bg-white .text-blue-400;
+    }
 }
 
 .card {

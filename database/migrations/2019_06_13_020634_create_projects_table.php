@@ -18,6 +18,7 @@ class CreateProjectsTable extends Migration
             $table->string('title');
             $table->unsignedBigInteger('owner_id'); // This must exactly match datatype of foreign key
             $table->text('description');
+            $table->text('notes')->nullable();
             $table->timestamps();
 
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
