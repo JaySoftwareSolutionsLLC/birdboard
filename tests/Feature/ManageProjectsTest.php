@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Project;
+use Facades\Tests\Setup\ProjectFactory;
 
 class ManageProjectsTest extends TestCase
 {
@@ -27,18 +28,6 @@ class ManageProjectsTest extends TestCase
         $this->get('/projects/create')->assertRedirect('login');
         $this->get($project->path())->assertRedirect('login');
     }
-
-    ///** @test */
-    //public function guests_may_not_view_projects() {
-        //$this->get('/projects')->assertRedirect('login');
-    //}
-
-    ///** @test */
-    //public function guests_may_not_view_a_single_project() {
-        //$project = factory('App\Project')->create();
-
-        //$this->get($project->path())->assertRedirect('login');
-    //}
     
     /** @test */ // <-- test will not run without whatever this is?
     public function a_user_can_create_a_project() {
@@ -65,36 +54,28 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function a_user_can_update_a_project()
     {
-        $this->withExceptionHandling();
-        // Sign in
-        $this->signIn();
-        $attributes = [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->sentence(),
-            'notes' => 'General notes here.'
-        ];
-        // Create project with this user
-        $response = $this->post('/projects', $attributes);
-        // Put project into DB
-        $project = Project::where($attributes)->first();
-        // Call update to project
-        $this->patch($project->path(), [
-            'notes' => 'New notes'
-        ]);
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner)
+            ->patch($project->path(), $attributes = [ 'notes' => 'New notes' ])
+            ->assertRedirect($project->path());
+        
         // Verify that project has been updated in database
-        $this->assertDatabaseHas('projects', ['notes' => 'New notes']);
+        $this->assertDatabaseHas('projects', $attributes);
         // Verify that project is displaying updated notes in show page
         $this->get($project->path())->assertSee('New notes');
     }    
     
     /** @test */
     public function a_user_can_view_their_project() {
+        $project = ProjectFactory::create();
+        /*
         $this->signIn();
         $project = factory('App\Project')->create(['owner_id' => auth()->id()]);
-
+        */
         //$this->post('/projects', $project);
     
-        $this->get($project->path())->assertSee($project->title)->assertSee(str_limit($project->description, 55));
+        $this->actingAs($project->owner)->get($project->path())->assertSee($project->title)->assertSee(str_limit($project->description, 55));
     }
 
     /** @test */
@@ -108,7 +89,7 @@ class ManageProjectsTest extends TestCase
     public function an_authenticated_user_cannot_update_the_projects_of_others() {
         $this->signIn();
         $project = factory('App\Project')->create();
-        $this->patch($project->path(), [])->assertStatus(403);
+        $this->patch($project->path())->assertStatus(403);
     }
 
     /** @test */
