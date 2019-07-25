@@ -50,6 +50,7 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
+    // Here is where middleware to apply to routes lives (LU&R pg 40)
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

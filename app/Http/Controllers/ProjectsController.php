@@ -8,12 +8,21 @@ use App\Project;
 
 class ProjectsController extends Controller
 {
+    /* T&V LU&R pg 34 | Adding middleware to at the controller rather than in a group of routes
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    */
     
     public function index() {
         //$projects = Project::all();
         $projects = auth()->user()->projects; // user can only see their projects
         //dd($projects);
+        // T&V LU&R pg60 | return response()->json($projects);
         return view('projects.index', compact('projects'));
+        //T&V LU&R pg 41 | return view('projects.index')->with('projects', $projects);
+        // LU&R pg 51 return view('projects.index');//->with('p', $projects);
     }
 
     public function show(Project $project) {
@@ -23,6 +32,7 @@ class ProjectsController extends Controller
     }
 
     public function store() {
+        // T&V LU&R pg 59 | abort_unless(auth()->user()->id == 2, 403);
         //dd('here');
         // validate
         $attributes = request()->validate([
@@ -37,6 +47,8 @@ class ProjectsController extends Controller
         // persist
         //Project::create($attributes);
         // redirect
+        // T&V LU&R pg 57 | return redirect()->home();
+        // T&V LU&R pg 57 | return redirect()->action('ProjectsController@index');
         return redirect($project->path());
     }
 

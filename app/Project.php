@@ -26,4 +26,12 @@ class Project extends Model
     {
         return $this->tasks()->create(compact('body'));
     }
+
+    // T&V LU&R pg 51
+    /*
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+    */
 }

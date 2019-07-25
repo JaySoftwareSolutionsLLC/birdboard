@@ -1,0 +1,7 @@
+php artisan make:controller [ControllerName]
+    --api >>> Generates an API controller with irrelevant methods removed (such as show)
+php artisan route:list
+php artisan route:cache
+php artisan route:clear
+npm run dev
+npm run watch

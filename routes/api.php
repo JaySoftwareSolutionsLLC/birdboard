@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+// API stands for Application Programming Interface and typically refers to a series of endpoints which allow reading and modification of information in the database from outide applications.
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

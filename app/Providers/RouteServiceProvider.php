@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use App\Project;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -23,9 +24,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
+        // Just allows parent boot method to still run
         parent::boot();
+        // Performing a custom binding (as opposed to Implicit Route Model Binding)
+        // LU&R pg 51 | Route::model('p', Project::class);
     }
 
     /**

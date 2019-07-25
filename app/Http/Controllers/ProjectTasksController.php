@@ -6,7 +6,7 @@ use App\Project;
 use App\Task;
 
 class ProjectTasksController extends Controller {
-    public function store(Project $project) {
+    public function store(Project $project) { // LU&R pg 47 | This method is using typehinting. This tells Laravel that $project is expected to be of type Project (from App\Project). This is what allows us to use it's Path method (as well as addTask)
         $this->authorize('update', $project);
         request()->validate(['body' => 'required']);
         $project->addTask(request('body'));
